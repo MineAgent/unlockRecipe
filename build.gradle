@@ -1,0 +1,50 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+version = project.version
+group = project.group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Minecraft 26.1+ ships unobfuscated (official names), so Loom needs no `mappings` dependency.
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// ServerPlayConnectionEvents.JOIN (fabric-networking-api-v1) and ServerTickEvents
+	// (fabric-lifecycle-events-v1) both ship inside Fabric API.
+	// compileOnly: Fabric Loader loads the real Fabric API from mods/ at runtime, so it must never be
+	// bundled into our jar (and Minecraft 26.2 is unobfuscated, so nothing needs remapping).
+	compileOnly "net.fabricmc.fabric-api:fabric-networking-api-v1:${project.fabric_networking_version}"
+	compileOnly "net.fabricmc.fabric-api:fabric-lifecycle-events-v1:${project.fabric_lifecycle_version}"
+}
+
+processResources {
+	def modVersion = project.version
+	inputs.property "version", modVersion
+	filteringCharset = "UTF-8"
+
+	filesMatching("fabric.mod.json") {
+		expand "version": modVersion
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+	it.options.encoding = "UTF-8"
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}

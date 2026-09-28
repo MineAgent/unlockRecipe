@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "unlockrecipe",
+	"version": "${version}",
+	"name": "Unlock Recipe",
+	"description": "Server side: every time a player joins the world, run /recipe give <player> * for them, so the whole recipe book is unlocked. Nothing is remembered about previous visits - the command runs on every join.",
+	"authors": [
+		"MineAgent"
+	],
+	"license": "LGPL-3.0-only",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.example.unlockrecipe.UnlockRecipe"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*",
+		"fabric-networking-api-v1": ">=6.3.4",
+		"fabric-lifecycle-events-v1": ">=4.1.4"
+	},
+	"contact": {
+		"homepage": "https://github.com/MineAgent/unlockRecipe",
+		"sources": "https://github.com/MineAgent/unlockRecipe"
+	}
+}
