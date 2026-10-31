@@ -10,7 +10,7 @@
 原版对「已经没有新配方可给」的回答是命令自己的提示（`没有新的配方`），模组照常执行、照常记日志。
 
 ```
-[Server thread/INFO]: DSH joined -> /recipe give DSH * : 4 -> 1561 of 1585 recipes unlocked for the player
+[Server thread/INFO]: Steve joined -> /recipe give Steve * : 4 -> 1561 of 1585 recipes unlocked for the player
 ```
 
 **不需要开启作弊、不需要 OP、不需要在服务器控制台手动敲命令**：命令由服务端自己的命令源
@@ -41,7 +41,7 @@
 ### 为什么是「加入世界」而不是「刚连进来」
 
 Fabric 的 `ServerPlayConnectionEvents.JOIN` 在 `PlayerList#placeNewPlayer` **开头**触发，
-那时玩家**还没被放进玩家列表**，`/recipe give DSH *` 的名字选择器会直接失败（`未找到玩家`）。
+那时玩家**还没被放进玩家列表**，`/recipe give Steve *` 的名字选择器会直接失败（`未找到玩家`）。
 `MinecraftServer#execute` 也救不了：在服务端线程上调用它是**立即执行**的，任务仍然跑在
 `placeNewPlayer` 里面。
 
@@ -86,7 +86,7 @@ Fabric API 用 `compileOnly`（运行时由 Fabric Loader 从 `mods/` 加载真�
 | 检查 | 结果 |
 | --- | --- |
 | 模组加载 | `Loading 56 mods: … - unlockrecipe 1.0.0` |
-| 加入即执行 | `DSH joined -> /recipe give DSH * : 4 -> 1561 of 1585 recipes unlocked for the player` |
+| 加入即执行 | `Steve joined -> /recipe give Steve * : 4 -> 1561 of 1585 recipes unlocked for the player` |
 | 服务端配方书 | 存档 `players/data/<uuid>.dat` 里的 `recipeBook.recipes` 由 **4** 变成 **1561**（独立于日志的持久化证据） |
 | 剩余 24 个配方 | 全部是 `crafting_special_*` / `crafting_decorated_pot` 这类**特殊配方**（旗帜复制、烟花、修复物品、地图扩展、书复制、盾牌图案、装饰罐）。原版配方书本来就不收录它们，`/recipe give *` 也给不了——直接在合成格摆材料即可，无需解锁 |
 | 重复加入 | 每次加入都再执行一次，行为一致 |

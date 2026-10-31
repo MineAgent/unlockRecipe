@@ -45,7 +45,7 @@ public final class UnlockRecipe implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		// Fabric fires this event at the head of PlayerList#placeNewPlayer, i.e. before the joining
-		// player has been put into the player list. A name selector such as "DSH" cannot be resolved
+		// player has been put into the player list. A name selector such as "Steve" cannot be resolved
 		// at that point and the command would fail with "player not found" (and MinecraftServer#execute
 		// does not help: called from the server thread it runs the task inline). So only remember the
 		// player here ...
