@@ -3,7 +3,7 @@
 [![License: LGPL-3.0-only](https://img.shields.io/badge/license-LGPL--3.0--only-blue.svg)](LICENSE)
 [![Docs: CC BY-NC-SA 4.0](https://img.shields.io/badge/docs-CC%20BY--NC--SA%204.0-lightgrey.svg)](LICENSE.CC-BY-NC-SA-4.0)
 
-**Minecraft 26.2**（Fabric）**服务端**模组：**只要有玩家加入世界，就替这个玩家执行一次
+**Minecraft 26.2 / 26.3**（Fabric）**服务端**模组：**只要有玩家加入世界，就替这个玩家执行一次
 `/recipe give <玩家> *`**，把服务端知道的全部配方解锁给他。
 
 不记录任何人是否来过：**每次加入都会执行**，同一玩家的第二次、第三次也一样。
@@ -61,18 +61,18 @@ Fabric 的 `ServerPlayConnectionEvents.JOIN` 在 `PlayerList#placeNewPlayer` **�
 
 ## 安装
 
-1. Minecraft **26.2** + Fabric Loader **0.19.5+**；
-2. 装 **Fabric API**（模组用到其中的
+1. Minecraft **26.2 / 26.3** + Fabric Loader **0.19.5+**（26.3 实例用 0.20.1）；
+2. 装 **Fabric API**（26.2 用 `0.160.0+26.2`，26.3 用 `0.166.2+26.3`；模组用到其中的
    `fabric-networking-api-v1`（`ServerPlayConnectionEvents`）和
    `fabric-lifecycle-events-v1`（`ServerTickEvents`），两者都随 Fabric API 一起安装）；
-3. 把 `unlockrecipe-1.0.0.jar` 放进**服务端**（或单人客户端）的 `mods/` 目录。
+3. 把 `unlockrecipe-1.0.1.jar` 放进**服务端**（或单人客户端）的 `mods/` 目录。
 
 独立服务端、单人存档、局域网世界都支持；客户端连别人的服务器时它什么也不做。
 
 ## 构建
 
 ```bash
-./gradlew build           # 产物：build/libs/unlockrecipe-1.0.0.jar
+./gradlew build           # 产物：build/libs/unlockrecipe-1.0.1.jar
 ```
 
 Minecraft 26.1+ 官方版就是未混淆的，所以 `build.gradle` 里没有 `mappings` 依赖；
@@ -85,11 +85,12 @@ Fabric API 用 `compileOnly`（运行时由 Fabric Loader 从 `mods/` 加载真�
 
 | 检查 | 结果 |
 | --- | --- |
-| 模组加载 | `Loading 56 mods: … - unlockrecipe 1.0.0` |
+| 模组加载 | `Loading 56 mods: … - unlockrecipe 1.0.1` |
 | 加入即执行 | `Steve joined -> /recipe give Steve * : 4 -> 1561 of 1585 recipes unlocked for the player` |
 | 服务端配方书 | 存档 `players/data/<uuid>.dat` 里的 `recipeBook.recipes` 由 **4** 变成 **1561**（独立于日志的持久化证据） |
 | 剩余 24 个配方 | 全部是 `crafting_special_*` / `crafting_decorated_pot` 这类**特殊配方**（旗帜复制、烟花、修复物品、地图扩展、书复制、盾牌图案、装饰罐）。原版配方书本来就不收录它们，`/recipe give *` 也给不了——直接在合成格摆材料即可，无需解锁 |
 | 重复加入 | 每次加入都再执行一次，行为一致 |
+| 26.3（Fabric Loader 0.20.1 + Fabric API 0.166.2+26.3） | 同一 jar 正常加载，进单人世界时日志 `DSH joined -> /recipe give DSH * : 125 -> 1739 of 2042 recipes unlocked for the player` |
 
 > 结论：**服务端能放进配方书的配方（1561/1561）全部解锁**，剩下的 24 个不是配方书条目。
 
